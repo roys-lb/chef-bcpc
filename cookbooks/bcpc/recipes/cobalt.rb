@@ -108,12 +108,12 @@ if not node["bcpc"]["vms_key"].nil?
         not_if "ceph osd pool get #{node[:bcpc][:ceph][:vms_disk][:name]} size | grep #{node[:bcpc][:ceph][:vms_disk][:replicas]}"
     end
 
-    bash "set-vms-disk-rados-pool-pgs" do
-        user "root"
-        optimal = power_of_2(get_ceph_osd_nodes.length*node[:bcpc][:ceph][:pgs_per_node]/node[:bcpc][:ceph][:vms_disk][:replicas]*node[:bcpc][:ceph][:vms_disk][:portion]/100)
-        code "ceph osd pool set #{node[:bcpc][:ceph][:vms_disk][:name]} pg_num #{optimal}"
-        not_if "((`ceph osd pool get #{node[:bcpc][:ceph][:vms_disk][:name]} pg_num | awk '{print $2}'` >= #{optimal}))"
-    end
+#    bash "set-vms-disk-rados-pool-pgs" do
+#        user "root"
+#        optimal = power_of_2(get_ceph_osd_nodes.length*node[:bcpc][:ceph][:pgs_per_node]/node[:bcpc][:ceph][:vms_disk][:replicas]*node[:bcpc][:ceph][:vms_disk][:portion]/100)
+#        code "ceph osd pool set #{node[:bcpc][:ceph][:vms_disk][:name]} pg_num #{optimal}"
+#        not_if "((`ceph osd pool get #{node[:bcpc][:ceph][:vms_disk][:name]} pg_num | awk '{print $2}'` >= #{optimal}))"
+#    end
 
     bash "create-vms-mem-rados-pool" do
         user "root"
@@ -131,10 +131,10 @@ if not node["bcpc"]["vms_key"].nil?
         not_if "ceph osd pool get #{node[:bcpc][:ceph][:vms_mem][:name]} size | grep #{node[:bcpc][:ceph][:vms_mem][:replicas]}"
     end
 
-    bash "set-vms-mem-rados-pool-pgs" do
-        user "root"
-        optimal = power_of_2(get_ceph_osd_nodes.length*node[:bcpc][:ceph][:pgs_per_node]/node[:bcpc][:ceph][:vms_mem][:replicas]*node[:bcpc][:ceph][:vms_mem][:portion]/100)
-        code "ceph osd pool set #{node[:bcpc][:ceph][:vms_mem][:name]} pg_num #{optimal}"
-        not_if "((`ceph osd pool get #{node[:bcpc][:ceph][:vms_mem][:name]} pg_num | awk '{print $2}'` >= #{optimal}))"
-    end
+#    bash "set-vms-mem-rados-pool-pgs" do
+#        user "root"
+#        optimal = power_of_2(get_ceph_osd_nodes.length*node[:bcpc][:ceph][:pgs_per_node]/node[:bcpc][:ceph][:vms_mem][:replicas]*node[:bcpc][:ceph][:vms_mem][:portion]/100)
+#        code "ceph osd pool set #{node[:bcpc][:ceph][:vms_mem][:name]} pg_num #{optimal}"
+#        not_if "((`ceph osd pool get #{node[:bcpc][:ceph][:vms_mem][:name]} pg_num | awk '{print $2}'` >= #{optimal}))"
+#    end
 end
