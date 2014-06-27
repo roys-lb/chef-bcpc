@@ -21,7 +21,6 @@
       "recipe[bcpc::heat]",
       "recipe[bcpc::horizon]",
       "recipe[bcpc::powerdns]",
-      "recipe[bcpc::kibana]",
       "recipe[bcpc::zabbix-head]",
       "role[BCPC-Worknode]"
     ],
