@@ -165,23 +165,6 @@ template "/etc/network/interfaces.d/iface-#{node[:bcpc][:floating][:interface]}"
   )
 end
 
-
-# This puts DNS/Search order changes into effect immediately, rather than at next boot.
-# Restarting the 'networking' service does not do this. An ifdown/ifup is more simple,
-# but would drop connections. This should be non-disruptive.
-ruby_block "update-host-etc-resolvconf" do
-    block do
-        IO.popen("/sbin/resolvconf -a #{node['bcpc']['floating']['interface']}.inet", "w") do |resolvconf|
-            # Each resolver gets its own nameserver line
-            resolvers.each do |resolver|
-                resolvconf.puts "nameserver #{resolver}"
-            end
-            # And the dns suffix search order
-            resolvconf.puts "search #{node['bcpc']['domain_name']}"
-        end
-    end
-end
-
 bash "interface-mgmt-make-static-if-dhcp" do
     user "root"
     code <<-EOH
