@@ -54,7 +54,7 @@ network_size=<%="#{node[:bcpc][:fixed][:network_size]}"%>
 flat_network_dns=<%="#{node[:bcpc][:management][:vip]}"%>
 dhcpbridge_flagfile=/etc/nova/nova.conf
 dhcpbridge=/usr/bin/nova-dhcpbridge
-force_dhcp_release=False
+force_dhcp_release=True
 share_dhcp_address=True
 teardown_unused_network_gateway=True
 fixed_ip_disassociate_timeout=30
