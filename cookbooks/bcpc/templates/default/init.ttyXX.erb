@@ -1,6 +1,6 @@
-# <%= ttyname %> - getty
+# <%= @ttyname %> - getty
 #
-# This service maintains a getty on <%= ttyname %> from the point the system is
+# This service maintains a getty on <%= @ttyname %> from the point the system is
 # started until it is shut down again.
 
 start on runlevel [23] and (
@@ -11,4 +11,4 @@ start on runlevel [23] and (
 stop on runlevel [!23]
 
 respawn
-exec /sbin/getty -8 38400 <%= ttyname %>
+exec /sbin/getty -8 38400 <%= @ttyname %>

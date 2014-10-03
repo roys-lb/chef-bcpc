@@ -16,17 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-node[:default][:getty][:ttys].each do |ttyname|
-  template "/etc/init/#{ttyname}" do
-      source "ttyXX.erb"
+node['getty']['ttys'].each do |ttyname|
+  template "/etc/init/#{ttyname}.conf" do
+      source "init.ttyXX.erb"
       owner "root"
       group "root"
       mode 00644
       notifies :restart, "service[#{ttyname}]", :delayed
-      variables( ttyname: ttyname )
+      variables({ :ttyname => ttyname })
   end
 
   service "#{ttyname}" do
+      provider Chef::Provider::Service::Upstart
       action [ :enable, :start ]
   end
 end
