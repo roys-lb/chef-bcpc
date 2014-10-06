@@ -10,7 +10,6 @@
       "recipe[bcpc::ceph-work]",
       "recipe[bcpc::ceph-rgw]",
       "recipe[bcpc::nova-work]",
-      "recipe[bcpc::zabbix-work]",
       "recipe[bcpc::disable-chef]"
     ],
     "description": "A functional compute node in a BCPC cluster",

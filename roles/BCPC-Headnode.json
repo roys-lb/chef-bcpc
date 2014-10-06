@@ -20,7 +20,6 @@
       "recipe[bcpc::heat]",
       "recipe[bcpc::horizon]",
       "recipe[bcpc::powerdns]",
-      "recipe[bcpc::zabbix-head]",
       "role[BCPC-Worknode]"
     ],
     "description": "A highly-available head node in a BCPC cluster",

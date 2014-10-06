@@ -9,8 +9,8 @@
     </groups>
     <templates>
         <template>
-            <template>BCBC-Worknode</template>
-            <name>BCBC-Worknode</name>
+            <template>BCPC-Worknode</template>
+            <name>BCPC-Worknode</name>
             <groups>
                 <group>
                     <name>Templates</name>
@@ -23,6 +23,29 @@
                 <application>
                     <name>RGW</name>
                 </application>
+                <application>
+                    <name>Network interfaces</name>
+                </application>
+                <application>
+                    <name>Performance</name>
+                </application>
+		<application>
+		  <name>Processes</name>
+                </application>
+		<application>
+		  <name>MySQL</name>
+                </application>
+		<application>
+		  <name>Functional Checks</name>
+                </application>
+		<application>
+		  <name>RGW</name>
+                </application>
+
+		<application>
+		  <name>VIP</name>
+                </application>
+
             </applications>
             <items>
                 <item>
@@ -940,17 +963,39 @@
                     <name>Templates</name>
                 </group>
             </groups>
+
             <applications>
                 <application>
-                    <name>Functional Checks</name>
+                    <name>Ceph</name>
                 </application>
                 <application>
-                    <name>MySQL</name>
+                    <name>RGW</name>
                 </application>
                 <application>
-                    <name>VIP</name>
+                    <name>Network interfaces</name>
                 </application>
+                <application>
+                    <name>Performance</name>
+                </application>
+		<application>
+		  <name>Processes</name>
+                </application>
+		<application>
+		  <name>MySQL</name>
+                </application>
+		<application>
+		  <name>Functional Checks</name>
+                </application>
+		<application>
+		  <name>RGW</name>
+                </application>
+
+		<application>
+		  <name>VIP</name>
+                </application>
+
             </applications>
+
             <items>
                 <item>
                     <name>Ceph PG Count: Active</name>
@@ -3679,10 +3724,7 @@
             <macros/>
             <templates>
                 <template>
-                    <name>BCBC-Worknode</name>
-                </template>
-                <template>
-                    <name>Template App Zabbix Server</name>
+                    <name>BCPC-Worknode</name>
                 </template>
             </templates>
             <screens>
@@ -3758,7 +3800,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:ceph.health.str(HEALTH_ERROR,#1)}=1</expression>
+            <expression>{BCPC-Worknode:ceph.health.str(HEALTH_ERROR,#1)}=1</expression>
             <name>Ceph Health Error</name>
             <url/>
             <status>0</status>
@@ -3768,7 +3810,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:ceph.health.str(HEALTH_WARN,#1)}=1</expression>
+            <expression>{BCPC-Worknode:ceph.health.str(HEALTH_WARN,#1)}=1</expression>
             <name>Ceph Health Warn</name>
             <url/>
             <status>0</status>
@@ -3798,7 +3840,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:system.run[ip route show table mgmt].str(default)}=0</expression>
+            <expression>{BCPC-Worknode:system.run[ip route show table mgmt].str(default)}=0</expression>
             <name>IP Route Check for MGMT failed on {HOST.NAME}</name>
             <url/>
             <status>0</status>
@@ -3808,7 +3850,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:system.run[ip route show table storage].str(scope)}=0</expression>
+            <expression>{BCPC-Worknode:system.run[ip route show table storage].str(scope)}=0</expression>
             <name>IP Route Check for STORAGE failed on {HOST.NAME}</name>
             <url/>
             <status>0</status>
@@ -3828,7 +3870,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:ceph.rgw.haproxy.avg(300)}&lt;10</expression>
+            <expression>{BCPC-Worknode:ceph.rgw.haproxy.avg(300)}&lt;10</expression>
             <name>RGW: HAProxy no longer pingging</name>
             <url/>
             <status>0</status>
@@ -3908,7 +3950,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:proc.num[python,nova,,nova-api].last(0)}#4</expression>
+            <expression>{BCPC-Worknode:proc.num[python,nova,,nova-api].last(0)}#4</expression>
             <name>Service Nova API down on {HOST.NAME}</name>
             <url/>
             <status>0</status>
@@ -3928,7 +3970,7 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:proc.num[python,nova,,nova-compute].last(0)}#1</expression>
+            <expression>{BCPC-Worknode:proc.num[python,nova,,nova-compute].last(0)}#1</expression>
             <name>Service Nova Compute down on {HOST.NAME}</name>
             <url/>
             <status>0</status>
@@ -3958,21 +4000,11 @@
             <dependencies/>
         </trigger>
         <trigger>
-            <expression>{BCBC-Worknode:proc.num[python,nova,,nova-network].last(0)}#1</expression>
+            <expression>{BCPC-Worknode:proc.num[python,nova,,nova-network].last(0)}#1</expression>
             <name>Service Nova Network down on {HOST.NAME}</name>
             <url/>
             <status>0</status>
             <priority>3</priority>
-            <description/>
-            <type>0</type>
-            <dependencies/>
-        </trigger>
-        <trigger>
-            <expression>{BCPC-Headnode:proc.num[python,nova,,nova-novncproxy].last(0)}#1</expression>
-            <name>Service Nova NoVNCProxy down on {HOST.NAME}</name>
-            <url/>
-            <status>0</status>
-            <priority>4</priority>
             <description/>
             <type>0</type>
             <dependencies/>

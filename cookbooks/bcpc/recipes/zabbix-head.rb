@@ -94,14 +94,22 @@ ruby_block "zabbix-database-creation" do
 end
 
 service "zabbix-server" do
-  if is_vip? 
-    action[:enable, :start]
-  else
-    action[:stop]
-  end
-  restart_command "if_vip restart zabbix-server"
-  provider Chef::Provider::Service::Upstart  
+    restart_command "if_vip restart zabbix-server"
+    provider Chef::Provider::Service::Upstart
+    action :nothing
 end
+
+bash "signal-vip-won" do
+  user "root"
+  code "if_vip initctl emit vip_won"
+end
+
+bash "signal-vip-lost" do
+  user "root"
+  code "if_not_vip service zabbix-server stop"
+  only_if "service zabbix-server status | grep running"
+end
+
 
 %w{traceroute php5-mysql php5-gd python-requests}.each do |pkg|
     package pkg do
@@ -147,17 +155,39 @@ bash "apache-enable-zabbix-web" do
     notifies :restart, "service[apache2]", :immediate
 end
 
-template "/usr/local/share/zabbix/zabbix-api-auto-discovery" do
-    source "zabbix_api_auto_discovery.erb"
-    owner "root"
-    group "root"
-    mode 00750
+directory "/usr/local/lib/python2.7/dist-packages/pyzabbix" do
+  owner "root"
+  mode 00775
 end
 
-ruby_block "zabbix-api-auto-discovery-register" do
-    block do
-        system "/usr/local/share/zabbix/zabbix-api-auto-discovery"
-    end
+cookbook_file "/usr/local/lib/python2.7/dist-packages/pyzabbix/__init__.py" do
+  source "pyzabbix.py"
+  owner "root"
+  mode 00755
+end
+
+cookbook_file "/tmp/zabbix_linux_active_template.xml" do
+  source "zabbix_linux_active_template.xml"
+  owner "root"
+  mode 00644
+end
+
+cookbook_file "/tmp/zabbix_bcpc_templates.xml" do
+  source "zabbix_bcpc_templates.xml"
+  owner "root"
+  mode 00644
+end
+
+cookbook_file "/usr/local/bin/zabbix_config" do
+  source "zabbix_config"
+  owner "root"
+  mode 00755
+end
+
+ruby_block "configure_zabbix_hosts" do
+ block do
+    %x[zabbix_config https://#{node[:bcpc][:management][:vip]}:7777 #{get_config('zabbix-admin-user')} #{get_config('zabbix-admin-password')}]
+ end 
 end
 
 include_recipe "bcpc::zabbix-work"
