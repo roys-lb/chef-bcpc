@@ -7,13 +7,9 @@
       "role[Basic]",
       "recipe[bcpc]",
       "recipe[bcpc::networking]",
-      "recipe[bcpc::networking-gw-test]",
-      "recipe[bcpc::networking-link-test]",
       "recipe[bcpc::ceph-work]",
       "recipe[bcpc::ceph-rgw]",
       "recipe[bcpc::nova-work]",
-      "recipe[bcpc::diamond]",
-      "recipe[bcpc::fluentd]",
       "recipe[bcpc::disable-chef]"
     ],
     "description": "A functional compute node in a BCPC cluster",
