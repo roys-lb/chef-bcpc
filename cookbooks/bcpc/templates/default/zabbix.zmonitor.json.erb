@@ -1,0 +1,8 @@
+{
+   "group" : "<%=@group%>",
+   "template" : "<%=@template%>",   
+   "zabbix_user" : "<%="#{get_config('zabbix-admin-user')}"%>", 
+   "zabbix_password" :  "<%="#{get_config('zabbix-admin-password')}"%>",
+   "zabbix_server": "https://<%="#{node[:bcpc][:management][:vip]}"%>:7777",
+   "ip" : "<%=@ip%>"
+}

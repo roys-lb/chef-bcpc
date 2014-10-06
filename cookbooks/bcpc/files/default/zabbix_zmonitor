@@ -1,0 +1,88 @@
+#!/usr/bin/env python
+ 
+from pyzabbix import ZabbixAPI
+import json
+import sys
+import os
+import commands
+ 
+
+
+from optparse import OptionParser
+usage = "usage: %prog [options] action"
+parser = OptionParser(usage)
+parser.add_option("-c", "--config", dest="config", default="/usr/local/etc/zmonitor.json",
+                  help="read config from FILENAME")
+
+(options, args) = parser.parse_args()
+if len(args) != 1:
+    parser.error("give an action: register|deregister|enable|disable")
+    
+action = args[0]
+config = json.load(open(options.config))
+
+server=config["zabbix_server"]
+username=config["zabbix_user"]
+password=config["zabbix_password"]
+template = config["template"]
+group = config["group"]
+hostname = os.uname()[1]
+ip = config.get("ip", "")
+
+
+zapi = ZabbixAPI(server)
+zapi.login(username, password)
+
+#
+# Get the hostid of the template 
+#
+
+tmp = zapi.template.get(filter = {"host" : template} )
+result = tmp[0]
+if "hostid" in result:
+  template_id = result["hostid"]
+else:
+  template_id = result["templateid"]
+#
+# Get the id of the group
+#
+tmp = zapi.hostgroup.get(filter = {"name" : group } )
+groupid = tmp[0]['groupid']
+interfaces = [ { "type": 1,
+                "main": 1,
+                "useip": 1,
+                "ip": ip,
+                "dns": "",
+                "port": 10050
+            }]
+
+
+if action =="register":
+    result = zapi.host.exists(host= hostname)
+    if not result:
+        host = zapi.host.create(**{"host" : hostname, "interfaces" : interfaces, "groups" : [ {"groupid" : groupid}  ], "templates" : [dict( templateid = template_id ) ] })
+elif action=="deregister":
+    result = zapi.host.exists({"host" : hostname})       
+    if result:
+        host = zapi.host.get({"filter" : {"host" : hostname } })
+        host_id = host[0]["hostid"]
+        hostids = zapi.host.delete({"hostid" : host_id } )
+    else:
+        print >>sys.stderr, "No such host"
+        sys.exit(1)
+elif action in ["enable", "disable"]:
+    result = zapi.host.exists({"host" : hostname})       
+    if result:
+    
+        host = zapi.host.get({"filter" : {"host" : hostname } })
+        host_id = host[0]["hostid"]
+        if action == "enable":
+            status = 0 # yes this IS enable, zabbix is bonkers
+        else:
+            status = 1 # yes this IS disable, zabbix is bonkers
+            
+        result = zapi.host.update({"hostid" : host_id, "status" : status } )
+        
+    else:
+        print >>sys.stderr, "No such host"
+        sys.exit(1)
