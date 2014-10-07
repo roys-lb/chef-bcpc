@@ -116,3 +116,42 @@ cookbook_file "/usr/local/bin/zabbix_discover_buckets" do
   owner "root"
   mode "00755"
 end
+
+directory "/usr/local/lib/python2.7/dist-packages/pyzabbix" do
+  owner "root"
+  mode 00775
+end
+
+cookbook_file "/usr/local/lib/python2.7/dist-packages/pyzabbix/__init__.py" do
+  source "pyzabbix.py"
+  owner "root"
+  mode 00755
+end
+
+cookbook_file "/usr/local/bin/zmonitor" do
+  source "zabbix_zmonitor"
+  owner "root"
+  mode "00755"
+end
+
+template "/usr/local/etc/zmonitor.json" do
+    source "zabbix.zmonitor.json.erb"
+    owner "root"
+    group "root"
+    if node.run_list.roles.include?('BCPC-Headnode')
+          variables(:group => "BCPC-Headnodes",
+                    :template =>  "BCPC-Headnode",
+                    :ip => node["bcpc"]["management"]["ip"])
+    else
+          variables(:group => "BCPC-Worknodes",
+                    :template =>  "BCPC-Worknode",
+                    :ip => node["bcpc"]["management"]["ip"])
+    end
+    mode 00600
+end
+
+bash "zmonitor-register" do
+  code "zmonitor register"
+  user "root"  
+  ignore_failure true
+end

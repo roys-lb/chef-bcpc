@@ -40,7 +40,7 @@ osapi_compute_extension=cobalt.nova.osapi.cobalt_extension.Cobalt_extension
 
 # Nova Scheduler
 scheduler_driver=nova.scheduler.filter_scheduler.FilterScheduler
-scheduler_default_filters=AggregateInstanceExtraSpecsFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter
+scheduler_default_filters=AggregateInstanceExtraSpecsFilter,AvailabilityZoneFilter,RamFilter,ComputeFilter,DifferentHostFilter,SameHostFilter
 
 # Nova Network settings
 network_manager=nova.network.manager.VlanManager
@@ -124,6 +124,7 @@ verbose=False
 debug=False
 ec2_private_dns_show_ip=True
 #default_log_levels="amqplib=DEBUG,sqlalchemy=DEBUG,boto=WARN,suds=INFO,eventlet.wsgi.server=WARN"
+default_log_levels="nova.dhcpbridge=DEBUG"
 #rpc_response_timeout=120
 
 # Auto-generated per-node settings below

@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: bcpc
-# Recipe:: networking-gw-test
+# Recipe:: getty
 #
 # Copyright 2014, Bloomberg Finance L.P.
 #
@@ -16,10 +16,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+node['getty']['ttys'].each do |ttyname|
+  template "/etc/init/#{ttyname}.conf" do
+      source "init.ttyXX.erb"
+      owner "root"
+      group "root"
+      mode 00644
+      notifies :restart, "service[#{ttyname}]", :delayed
+      variables({ :ttyname => ttyname })
+  end
 
-ruby_block "check-gateways" do
-  block do
-    ping_node("storage gateway", node[:bcpc][:storage][:gateway])
-    ping_node("floating gateway", node[:bcpc][:floating][:gateway])
+  service "#{ttyname}" do
+      provider Chef::Provider::Service::Upstart
+      action [ :enable, :start ]
   end
 end

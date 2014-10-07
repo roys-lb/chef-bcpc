@@ -95,7 +95,7 @@ default['bcpc']['dns_servers'] = [ "8.8.8.8", "8.8.4.4" ]
 #  Repos for things we rely on
 #
 ###########################################
-default['bcpc']['repos']['ceph'] = "http://www.ceph.com/debian-dumpling"
+default['bcpc']['repos']['ceph'] = "http://www.ceph.com/debian-firefly"
 default['bcpc']['repos']['ceph-extras'] = "http://www.ceph.com/packages/ceph-extras/debian"
 default['bcpc']['repos']['ceph-el6-x86_64'] = "http://ceph.com/rpm-dumpling/el6/x86_64"
 default['bcpc']['repos']['ceph-el6-noarch'] = "http://ceph.com/rpm-dumpling/el6/noarch"
@@ -136,3 +136,10 @@ default[:bcpc][:ports][:apache][:radosgw] = 8080
 default[:bcpc][:ports][:apache][:radosgw_https] = 8443
 default[:bcpc][:ports][:haproxy][:radosgw] = 80
 default[:bcpc][:ports][:haproxy][:radosgw_https] = 443
+
+###########################################
+#
+#  Recipe-specific attributes
+#
+###########################################
+default['getty']['ttys'] = %w( ttyS0 ttyS1 )
