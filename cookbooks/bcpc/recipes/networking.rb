@@ -40,6 +40,8 @@ service "cron" do
     action [ :enable, :start ]
 end
 
+service "networking" 
+
 # Core networking package
 package "vlan"
 
@@ -107,39 +109,35 @@ directory "/etc/network/interfaces.d" do
 end
 
 bash "setup-interfaces-source" do
-  user "root"
-  code <<-EOH
-    echo "source /etc/network/interfaces.d/iface-*" >> /etc/network/interfaces
-  EOH
-  not_if "grep '^source /etc/network/interfaces.d/' /etc/network/interfaces"
+    user "root"
+    code <<-EOH
+        echo "source /etc/network/interfaces.d/iface-*" >> /etc/network/interfaces
+    EOH
+    not_if "grep '^source /etc/network/interfaces.d/' /etc/network/interfaces"
 end
 
-template "/etc/network/interfaces.d/iface-#{node[:bcpc][:management][:interface]}" do
-  source "network.iface.erb"
-  owner "root"
-  group "root"
-  mode 00644
-  variables(
-    :interface => node[:bcpc][:management][:interface],
-    :ip => node[:bcpc][:management][:ip],
-    :netmask => node[:bcpc][:management][:netmask],
-    :gateway => node[:bcpc][:management][:gateway],
-    :metric => 100
-  )
-end
+[['management', 100], ['storage', 300]].each do |net, metric|
+    template "/etc/network/interfaces.d/iface-#{node['bcpc'][net]['interface']}" do
+        source "network.iface.erb"
+        owner "root"
+        group "root"
+        mode 00644
+        variables(
+            :interface => node['bcpc'][net]['interface'],
+            :ip => node['bcpc'][net]['ip'],
+            :netmask => node['bcpc'][net]['netmask'],
+            :gateway => node['bcpc'][net]['gateway'],
+            :mtu => node['bcpc'][net]['mtu'],
+            :metric => metric
+        )
+    end
 
-template "/etc/network/interfaces.d/iface-#{node[:bcpc][:storage][:interface]}" do
-  source "network.iface.erb"
-  owner "root"
-  group "root"
-  mode 00644
-  variables(
-    :interface => node[:bcpc][:storage][:interface],
-    :ip => node[:bcpc][:storage][:ip],
-    :netmask => node[:bcpc][:storage][:netmask],
-    :gateway => node[:bcpc][:storage][:gateway],
-    :metric => 300
-  )
+    if node['bcpc'][net]['mtu']
+        execute "set-#{net}-mtu" do
+            command "ifconfig #{node['bcpc'][net]['interface']} mtu #{node['bcpc'][net]['mtu']} up"
+            not_if "ifconfig #{node['bcpc'][net]['interface']} | grep MTU:#{node['bcpc'][net]['mtu']} up"
+        end
+    end    
 end
 
 # set up the DNS resolvers
@@ -175,6 +173,14 @@ bash "disable-dhclient-resolvconf-enter-hook" do
     EOH
     only_if { ::File.exists?(dhcp_resolvconf_hook) }
 end
+
+if node['bcpc']['floating']['mtu']
+    execute "set-floating-mtu" do
+        command "ifconfig #{node['bcpc']['floating']['interface']} mtu #{node['bcpc']['floating']['mtu']} up"
+        not_if "ifconfig #{node['bcpc']['floating']['interface']} | grep MTU:#{node['bcpc']['floating']['mtu']} up"
+    end
+end    
+
 
 bash "interface-mgmt-make-static-if-dhcp" do
     user "root"
