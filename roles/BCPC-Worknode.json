@@ -9,7 +9,7 @@
       "recipe[bcpc::networking]",
       "recipe[bcpc::ceph-work]",
       "recipe[bcpc::ceph-rgw]",
-      "recipe[bcpc::nova-work]",
+      "recipe[bcpc::nova-work]"
     ],
     "description": "A functional compute node in a BCPC cluster",
     "chef_type": "role",
