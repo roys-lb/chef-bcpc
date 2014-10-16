@@ -8,7 +8,7 @@
       "recipe[bcpc::packages-common]",
       "recipe[bcpc::packages-debugging]",
       "recipe[bcpc::getty]",
-      "recipe[ntp]",
+      "recipe[ntp]"
     ],
     "description": "Basic server",
     "chef_type": "role",
