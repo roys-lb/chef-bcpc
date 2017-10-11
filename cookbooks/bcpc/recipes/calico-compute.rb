@@ -22,6 +22,7 @@ return unless node['bcpc']['enabled']['neutron']
 include_recipe 'bcpc::etcd-common'
 include_recipe 'bcpc::bird-compute'
 include_recipe 'bcpc::packages-calico'
+include_recipe 'bcpc::neutron-common'
 
 file '/etc/init/neutron-dhcp-agent.override' do
   content 'manual'
