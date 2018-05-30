@@ -106,11 +106,12 @@ vif_plugging_timeout = 0
 
 [neutron]
 url = <%= node['bcpc']['protocol']['neutron'] %>://openstack.<%= node['bcpc']['cluster_domain'] %>:9696
-admin_tenant_name = <%= node['bcpc']['keystone']['admin']['project_name'] %>
-auth_strategy = keystone
-admin_auth_url = <%= node['bcpc']['protocol']['keystone'] %>://openstack.<%= node['bcpc']['cluster_domain'] %>:35357/v2.0/
-admin_username = <%= get_config('keystone-admin-user') %>
-admin_password = <%= get_config('keystone-admin-password') %>
+<% snippet = 'keystone/keystone_authtoken.snippet.erb' %>
+<%# add the node for chef nonsense... see https://github.com/chef/chef/issues/1506 %>
+<% vars = @partials[snippet]['variables'].merge({node: @node}) %>
+<%= render snippet, :variables => vars %>
+service_metadata_proxy = True
+metadata_proxy_shared_secret = <%= get_config('neutron-metadata-proxy-shared-secret') %>
 <% else %>
 network_manager=nova.network.manager.VlanManager
 firewall_driver=nova.virt.libvirt.firewall.IptablesFirewallDriver

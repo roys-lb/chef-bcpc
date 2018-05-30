@@ -42,7 +42,7 @@ nova_metadata_ip = <%= node['bcpc']['management']['ip'] %>
 # shared secret to prevent spoofing.  You may select any string for a secret,
 # but it must match here and in the configuration used by the Nova Metadata
 # Server. NOTE: Nova uses the same config key, but in [neutron] section.
-# metadata_proxy_shared_secret =
+metadata_proxy_shared_secret = <%= get_config('neutron-metadata-proxy-shared-secret') %>
 
 # Location of Metadata Proxy UNIX domain socket
 # metadata_proxy_socket = $state_path/metadata_proxy

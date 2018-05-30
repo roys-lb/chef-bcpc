@@ -26,6 +26,7 @@ ruby_block "initialize-neutron-config" do
     make_config('mysql-neutron-user', "neutron")
     make_config('mysql-neutron-password', secure_password)
     make_config('keystone-neutron-password', secure_password)
+    make_config('neutron-metadata-proxy-shared-secret', secure_password)
   end
 end
 
