@@ -19,6 +19,7 @@
 require 'ipaddr'
 
 include_recipe "bcpc::openstack"
+include_recipe "bcpc::neutron-common"
 
 ruby_block "initialize-nova-config" do
     block do
