@@ -63,7 +63,7 @@ end
 # Configure the glance keystone bits
 # https://docs.openstack.org/mitaka/install-guide-ubuntu/glance-install.html
 domain = node['bcpc']['keystone']['service_project']['domain']
-glance_username = 'glance'
+glance_username = node['bcpc']['glance']['user']
 glance_project_name = node['bcpc']['keystone']['service_project']['name']
 admin_role_name = node['bcpc']['keystone']['admin_role']
 

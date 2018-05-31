@@ -55,6 +55,7 @@ end
 domain = node['bcpc']['keystone']['service_project']['domain']
 neutron_username = node['bcpc']['neutron']['user']
 neutron_project_name = node['bcpc']['keystone']['service_project']['name']
+admin_role_name = node['bcpc']['keystone']['admin_role']
 
 ruby_block 'keystone-create-neutron-user' do
   block do
