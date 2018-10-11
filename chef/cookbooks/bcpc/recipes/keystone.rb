@@ -25,6 +25,16 @@ database = {
   'password' => config['keystone']['db']['password'],
 }
 
+# install haproxy fragment
+template '/etc/haproxy/haproxy.d/keystone.cfg' do
+  source 'keystone/haproxy.cfg.erb'
+  variables(
+    headnodes: headnodes(all: true),
+    vip: node['bcpc']['cloud']['vip']
+  )
+  notifies :restart, 'service[haproxy-keystone]', :immediately
+end
+
 # package installation and service definition starts
 %w(keystone python-ldap python-ldappool).each do |pkg|
   package pkg
@@ -32,6 +42,10 @@ end
 
 service 'keystone' do
   service_name 'apache2'
+end
+
+service 'haproxy-keystone' do
+  service_name 'haproxy'
 end
 
 # fernet key installation starts

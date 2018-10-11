@@ -151,11 +151,24 @@ end
 #
 # create image service and endpoints ends
 
+# install haproxy fragment
+template '/etc/haproxy/haproxy.d/glance.cfg' do
+  source 'glance/haproxy.cfg.erb'
+  variables(
+    headnodes: headnodes(all: true),
+    vip: node['bcpc']['cloud']['vip']
+  )
+  notifies :restart, 'service[haproxy-glance]', :immediately
+end
+
 # glance package installation and service definition starts
 #
 package 'glance'
 package 'qemu-utils'
 service 'glance-api'
+service 'haproxy-glance' do
+  service_name 'haproxy'
+end
 #
 # glance package installation and service definition ends
 

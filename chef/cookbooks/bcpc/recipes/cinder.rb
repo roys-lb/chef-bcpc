@@ -146,6 +146,16 @@ begin
 end
 # create cinder volume services and endpoints ends
 
+# install haproxy fragment
+template '/etc/haproxy/haproxy.d/cinder.cfg' do
+  source 'cinder/haproxy.cfg.erb'
+  variables(
+    headnodes: headnodes(all: true),
+    vip: node['bcpc']['cloud']['vip']
+  )
+  notifies :restart, 'service[haproxy-cinder]', :immediately
+end
+
 # cinder package installation and service definition starts
 package 'cinder-api'
 package 'cinder-scheduler'
@@ -156,6 +166,9 @@ service 'cinder-api' do
 end
 service 'cinder-volume'
 service 'cinder-scheduler'
+service 'haproxy-cinder' do
+  service_name 'haproxy'
+end
 # cinder package installation and service definition ends
 
 # update the file permissions on ceph.client.cinder.keyring to allow the

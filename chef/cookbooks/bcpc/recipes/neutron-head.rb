@@ -118,10 +118,23 @@ end
 #
 # create network service and endpoints ends
 
+# install haproxy fragment
+template '/etc/haproxy/haproxy.d/neutron.cfg' do
+  source 'neutron/haproxy.cfg.erb'
+  variables(
+    headnodes: headnodes(all: true),
+    vip: node['bcpc']['cloud']['vip']
+  )
+  notifies :restart, 'service[haproxy-neutron]', :immediately
+end
+
 # neutron package installation and service definition starts
 #
 package 'neutron-server'
 service 'neutron-server'
+service 'haproxy-neutron' do
+  service_name 'haproxy'
+end
 #
 # neutron package installation and service definition ends
 
