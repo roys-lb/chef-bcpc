@@ -6,7 +6,6 @@ run_list:
   - role[node]
   - recipe[bcpc::haproxy]
   - recipe[bcpc::ssh]
-  - recipe[bcpc::bird]
   - recipe[bcpc::etcd-member]
   - recipe[bcpc::rabbitmq]
   - recipe[bcpc::memcached]

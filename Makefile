@@ -11,6 +11,8 @@ storagenodes = $$(ansible storagenodes -i ${inventory} --list | tail -n +2 | wc 
 all : \
 	download-assets \
 	operator \
+	configure-apt \
+	configure-networking \
 	chef-server \
 	chef-workstation \
 	chef-node \
@@ -40,6 +42,18 @@ operator :
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
 		-t operator --limit cloud
+
+configure-apt :
+
+	ansible-playbook -v \
+		-i ${inventory} ${playbooks}/site.yml \
+		-t configure-apt --limit cloud
+
+configure-networking :
+
+	ansible-playbook -v \
+		-i ${inventory} ${playbooks}/site.yml \
+		-t configure-networking --limit cloud
 
 download-assets :
 

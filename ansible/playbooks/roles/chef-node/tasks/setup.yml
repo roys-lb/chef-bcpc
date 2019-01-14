@@ -1,16 +1,3 @@
-- name: set hostname
-  hostname:
-    name: "{{ node_hostname }}"
-
-- name: update /etc/hosts
-  blockinfile:
-    dest: /etc/hosts
-    content: |
-      127.0.0.1	localhost
-      127.0.1.1	{{ node_fqdn }}	{{ node_hostname }}
-      {{ node_ip }}	{{ node_fqdn }}	{{ node_hostname }}
-      {{ chef_server_ip }}	{{ chef_server_fqdn }}	{{ chef_server_host }}
-
 - name: upload chef-client
   copy:
     src: "{{ assets_download_dir }}/chef_14.6.13-1_amd64.deb"
@@ -113,4 +100,24 @@
   when: node_runlist_check is failed
   become: false
   command: knife node run_list add "{{ node_fqdn }}" "{{ node_runlist }}"
+  delegate_to: "{{ chef_server_host }}"
+
+- name: capture node details
+  become: false
+  command: knife node show "{{ node_fqdn }}" --long --format json
+  register: node_details_raw
+  delegate_to: "{{ chef_server_host }}"
+
+- name: update node details
+  set_fact:
+    node_details: "{{ node_details_raw.stdout | from_json | update_chef_node(hostvars[inventory_hostname]) }}"
+
+- name: write updated node details
+  copy:
+    content: "{{ node_details | to_nice_json }}"
+    dest: "{{ node_fqdn }}.json"
+  delegate_to: "{{ chef_server_host }}"
+
+- name: import node changes
+  command: knife node from file "{{ node_fqdn }}.json"
   delegate_to: "{{ chef_server_host }}"
