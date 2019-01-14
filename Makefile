@@ -10,7 +10,7 @@ storagenodes = $$(ansible storagenodes -i ${inventory} --list | tail -n +2 | wc 
 
 all : \
 	download-assets \
-	operator \
+	create-operator-user \
 	configure-apt \
 	configure-networking \
 	chef-server \
@@ -75,7 +75,9 @@ chef-workstation :
 
 chef-node :
 
-	ansible-playbook -v -i ${inventory} ${playbooks}/site.yml -t chef-node
+	ansible-playbook -v \
+		-i ${inventory} ${playbooks}/site.yml \
+		-t chef-node --limit cloud
 
 chef-client : \
 	chef-client-bootstraps \
