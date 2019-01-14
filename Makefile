@@ -25,19 +25,19 @@ create :
 
 	virtual/bin/create-virtual-environment.sh
 
-create-network :
+create-virtual-network :
 
-	virtual/bin/create-network.sh
+	virtual/bin/create-virtual-network.sh
 
 destroy :
 
 	virtual/bin/destroy-virtual-environment.sh
 
-destroy-network :
+destroy-virtual-network :
 
-	virtual/bin/destroy-network.sh
+	virtual/bin/destroy-virtual-network.sh
 
-operator :
+create-operator-user :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
