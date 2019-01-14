@@ -1,0 +1,18 @@
+network:
+  version: 2
+  ethernets:
+    eth0:
+      addresses:
+        - 10.0.2.15/24
+      nameservers:
+        addresses:
+          - 10.0.2.3
+    eth1: # s1r3t2
+      addresses:
+        - 172.16.1.11/31
+    eth2: # s2r3t2
+      addresses:
+        - 172.16.2.11/31
+    eth3: # r3t2
+      addresses:
+        - 10.129.3.17/28

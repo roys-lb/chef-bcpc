@@ -1,0 +1,23 @@
+network:
+  version: 2
+  ethernets:
+    eth0:
+      dhcp4: true
+    eth1: # s2r1t1
+      addresses:
+        - 172.16.2.0/31
+    eth2: # s2r1t2
+      addresses:
+        - 172.16.2.2/31
+    eth3: # s2r2t1
+      addresses:
+        - 172.16.2.4/31
+    eth4: # s2r2t2
+      addresses:
+        - 172.16.2.6/31
+    eth5: # s2r3t1
+      addresses:
+        - 172.16.2.8/31
+    eth6: # s2r3t2
+      addresses:
+        - 172.16.2.10/31
