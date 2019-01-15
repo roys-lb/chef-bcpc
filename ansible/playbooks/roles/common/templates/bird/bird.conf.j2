@@ -8,6 +8,11 @@ filter to_tor {
 }
 
 filter from_tor {
+  if net = 0.0.0.0/0 then accept;
+  reject;
+}
+
+filter to_kernel {
   krt_prefsrc = {{ interfaces['service']['ip'] }};
   if net = 0.0.0.0/0 then accept;
   reject;
@@ -19,8 +24,8 @@ protocol kernel {
   scan time 2;    # Scan kernel routing table every 2 seconds
   merge paths on;
   graceful restart;
-  export all;
-  import filter from_tor;
+  export filter to_kernel;
+  import none;
 }
 
 protocol direct {

@@ -21,7 +21,11 @@ all : \
 	add-cloud-images \
 	register-compute-nodes
 
-create :
+create: create-virtual-network create-virtual-nodes
+
+destroy: destroy-virtual-network destroy-virtual-nodes
+
+create-virtual-nodes :
 
 	virtual/bin/create-virtual-environment.sh
 
@@ -29,7 +33,7 @@ create-virtual-network :
 
 	virtual/bin/create-virtual-network.sh
 
-destroy :
+destroy-virtual-nodes :
 
 	virtual/bin/destroy-virtual-environment.sh
 
