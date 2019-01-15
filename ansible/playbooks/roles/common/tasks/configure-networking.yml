@@ -34,6 +34,7 @@
   delay: 2
   register: result
   until: result.rc == 0
+  when: ansible_virtualization_type != 'virtualbox'
 
 - name: service ip netdev config
   template:
