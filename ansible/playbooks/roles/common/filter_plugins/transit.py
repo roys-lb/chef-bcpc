@@ -19,7 +19,8 @@ def find_interface(facts, macaddress):
   interfaces = facts['interfaces']
 
   for interface in interfaces:
-    if interface == 'lo': continue
+    if interface == 'lo':
+      continue
     if facts[interface]['macaddress'] == macaddress:
       return facts[interface]
 
