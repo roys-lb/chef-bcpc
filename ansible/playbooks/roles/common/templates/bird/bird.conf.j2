@@ -18,6 +18,11 @@ filter to_kernel {
   reject;
 }
 
+filter from_kernel {
+  if ifname ~ "tap*" then accept;
+  reject;
+}
+
 protocol kernel {
   learn;          # Learn all alien routes from the kernel
   persist;        # Don't remove routes on bird shutdown
@@ -25,11 +30,11 @@ protocol kernel {
   merge paths on;
   graceful restart;
   export filter to_kernel;
-  import none;
+  import filter from_kernel;
 }
 
 protocol direct {
-  interface "*";
+  interface "-eth0", "lo", "service*", "ens*", "eth*", "enp*";
 }
 
 protocol device {

@@ -5,6 +5,9 @@ bind_host = <%= node['service_ip'] %>
 auth_strategy = keystone
 transport_url = rabbit://<%= @headnodes.map{ |n| "#{@config['rabbit']['username']}:#{@config['rabbit']['password']}@#{n['service_ip']}:5672" }.join(',') %>
 state_path = /var/lib/neutron
+<% unless node['bcpc']['openstack']['services']['workers'].nil? %>
+api_workers = <%= node['bcpc']['openstack']['services']['workers'] %>
+<% end %>
 
 [agent]
 root_helper = sudo /usr/bin/neutron-rootwrap /etc/neutron/rootwrap.conf

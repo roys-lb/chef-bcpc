@@ -29,11 +29,15 @@ transport_url = rabbit://<%= @headnodes.map{|n| "#{@config['rabbit']['username']
 <% if @is_headnode -%>
 enabled_apis = osapi_compute
 osapi_compute_listen = <%= node['service_ip'] %>
-osapi_compute_workers = <%= node['bcpc']['nova']['workers'] %>
+<% unless node['bcpc']['openstack']['services']['workers'].nil? %>
+osapi_compute_workers = <%= node['bcpc']['openstack']['services']['workers'] %>
+<% end%>
 <% else %>
 enabled_apis = metadata
 metadata_listen = <%= node['bcpc']['nova']['metadata_listen'] %>
-metadata_workers = <%= node['bcpc']['nova']['workers'] %>
+<% unless node['bcpc']['openstack']['services']['workers'].nil? %>
+metadata_workers = <%= node['bcpc']['openstack']['services']['workers'] %>
+<% end%>
 <% end %>
 
 <% if not node['bcpc']['nova']['default_log_levels'].nil? %>
@@ -83,7 +87,9 @@ password = <%= @config['placement']['creds']['os']['password'] %>
 os_region_name = <%= node['bcpc']['cloud']['region'] %>
 
 [conductor]
-workers = <%= node['bcpc']['nova']['workers'] %>
+<% unless node['bcpc']['openstack']['services']['workers'].nil? %>
+workers = <%= node['bcpc']['openstack']['services']['workers'] %>
+<% end%>
 
 [glance]
 api_servers = <%= "https://#{@vip}:9292" %>
@@ -116,14 +122,17 @@ backend = oslo_cache.memcache_pool
 memcache_servers = <%= @headnodes.map{|n| "#{n['service_ip']}:11211" }.join(",") %>
 
 [quota]
-<% node['bcpc']['nova']['quota']['global'].each do |quota, value| %>
-<%= "#{quota} = #{value}" %>
+<% node['bcpc']['nova']['quota']['default'].each do |resource, limit| %>
+<%= "#{resource} = #{limit}" %>
 <% end %>
 max_age = 28800
 until_refresh = 10
 
 [scheduler]
 driver = filter_scheduler
+<% unless node['bcpc']['openstack']['services']['workers'].nil? %>
+workers = <%= node['bcpc']['openstack']['services']['workers'] %>
+<% end%>
 
 [filter_scheduler]
 available_filters = nova.scheduler.filters.all_filters

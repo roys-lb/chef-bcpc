@@ -1,6 +1,7 @@
 - import_tasks: operator.yml
   become: true
   vars:
+    ansible_host: "{{ interfaces['transit'] | primary_transit_ip }}"
     ansible_ssh_user: "{{ initial_ssh_user }}"
     ansible_ssh_pass: "{{ initial_ssh_pass }}"
     ansible_sudo_pass: "{{ initial_ssh_pass }}"
@@ -15,11 +16,13 @@
   tags: [never,ceph-destroy-osds]
 
 - import_tasks: configure-apt.yml
+  vars:
+    ansible_host: "{{ interfaces['transit'] | primary_transit_ip }}"
   become: true
   tags: [never,configure-apt]
 
 - import_tasks: configure-networking.yml
   become: true
+  vars:
+    ansible_host: "{{ interfaces['transit'] | primary_transit_ip }}"
   tags: [never,configure-networking]
-
-

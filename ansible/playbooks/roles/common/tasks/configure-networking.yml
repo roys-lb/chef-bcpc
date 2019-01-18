@@ -54,10 +54,11 @@
     state: restarted
   when: networkd.changed
 
-- name: delete default netplan config
-  file:
-    state: absent
-    path: /etc/netplan/01-netcfg.yaml
+- name: rename default netplan config
+  command: mv /etc/netplan/01-netcfg.yaml /etc/netplan/01-netcfg.yaml.orig
+  args:
+    removes: /etc/netplan/01-netcfg.yaml
+    creates: /etc/netplan/01-netcfg.yaml.orig
   register: netplan
 
 - name: install virtualbox nat interface config
@@ -90,6 +91,7 @@
     src: /run/systemd/resolve/resolv.conf
     dest: /etc/resolv.conf
     state: link
+    force: true
   register: resolved
 
 - name: restart systemd-resolved
