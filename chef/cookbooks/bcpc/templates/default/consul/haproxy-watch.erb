@@ -17,7 +17,7 @@
 #
 
 remove_cloud_ip() {
-    /sbin/ip address remove \
+    /sbin/ip address delete \
       <%= node['bcpc']['cloud']['vip'] %>/32 dev lo
 }
 

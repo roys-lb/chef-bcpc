@@ -13,11 +13,11 @@ all : \
 	create-operator-user \
 	configure-apt \
 	configure-networking \
-	chef-server \
-	chef-workstation \
-	chef-node \
-	file-server \
-	chef-client \
+	configure-chef-server \
+	configure-chef-workstation \
+	configure-chef-nodes \
+	configure-file-server \
+	run-chef-client \
 	add-cloud-images \
 	register-compute-nodes
 
@@ -65,37 +65,37 @@ download-assets :
 		-i ${inventory} ${playbooks}/site.yml \
 		-t download-assets --limit localhost
 
-chef-server :
+configure-chef-server :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
 		-t chef-server --limit bootstraps
 
-chef-workstation :
+configure-chef-workstation :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
 		-t chef-workstation --limit bootstraps
 
-chef-node :
+configure-chef-nodes :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
 		-t chef-node --limit cloud
 
-chef-client : \
-	chef-client-bootstraps \
-	chef-client-headnodes \
-	chef-client-worknodes \
-	chef-client-storagenodes
+run-chef-client : \
+	run-chef-client-bootstraps \
+	run-chef-client-headnodes \
+	run-chef-client-worknodes \
+	run-chef-client-storagenodes
 
-chef-client-bootstraps :
+run-chef-client-bootstraps :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
 		-t chef-client --limit bootstraps
 
-chef-client-headnodes :
+run-chef-client-headnodes :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
@@ -109,13 +109,13 @@ chef-client-headnodes :
 			-e "step=1"; \
 	fi
 
-chef-client-worknodes :
+run-chef-client-worknodes :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
 		-t chef-client --limit worknodes
 
-chef-client-storagenodes :
+run-chef-client-storagenodes :
 
 	@if [ "${storagenodes}" -gt 0 ]; then \
 		ansible-playbook -v \
@@ -135,7 +135,7 @@ register-compute-nodes:
 		-i ${inventory} ${playbooks}/site.yml \
 		-t register-compute-nodes --limit headnodes
 
-upload-bcpc :
+sync-chef :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
@@ -151,7 +151,7 @@ upload-all :
 		-i ${inventory} ${playbooks}/site.yml \
 		-t upload-bcpc --limit bootstraps
 
-file-server :
+configure-file-server :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \

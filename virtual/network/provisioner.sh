@@ -1,6 +1,6 @@
 #!/bin/bash -x
 
-COMMON_PKGS="lldpd traceroute"
+COMMON_PKGS="lldpd traceroute iperf"
 SWITCH_PKGS="bird iptables-persistent"
 
 HOSTNAME=${1}

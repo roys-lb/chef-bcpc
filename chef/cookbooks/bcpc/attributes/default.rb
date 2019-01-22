@@ -43,7 +43,7 @@ default['bcpc']['proxy']['proxies']['https'] = ''
 # rabbitmq
 ###############################################################################
 
-default['bcpc']['rabbitmq']['repo']['enabled'] = true
+default['bcpc']['rabbitmq']['repo']['enabled'] = false
 default['bcpc']['rabbitmq']['repo']['url'] = 'http://dl.bintray.com/rabbitmq/debian'
 
 # if changing this setting, you will need to reset Mnesia

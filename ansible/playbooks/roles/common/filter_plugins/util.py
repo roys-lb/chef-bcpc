@@ -4,12 +4,12 @@ __metaclass__ = type
 
 import ipaddress
 
-def primary_transit_ip(a, *args, **kw):
+def primary_ip(a, *args, **kw):
   for transit in a:
     if 'primary' in transit and transit['primary'] is True:
       return ipaddress.IPv4Interface(transit['cidr']).ip
 
-  return None
+  return args[0]['ansible_host']
 
 def transit_interfaces(a, *args, **kw):
   interfaces = []
@@ -48,7 +48,7 @@ def update_chef_node(a, *args, **kw):
 class FilterModule(object):
 
   filter_map = {
-    'primary_transit_ip': primary_transit_ip,
+    'primary_ip': primary_ip,
     'transit_interfaces': transit_interfaces,
     'update_chef_node': update_chef_node,
   }
