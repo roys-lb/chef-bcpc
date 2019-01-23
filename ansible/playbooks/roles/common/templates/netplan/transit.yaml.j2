@@ -3,7 +3,7 @@ network:
   ethernets:
     {{ item['name'] }}:
       addresses:
-        - {{ item['cidr'] }}
+        - {{ item['ip'] }}
       nameservers:
         addresses:
           - {{ cloud_ip }}

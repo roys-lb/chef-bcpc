@@ -3,8 +3,8 @@
 ###############################################################################
 
 default['bcpc']['consul']['remote_file'] = {
-  'file' => 'consul_1.2.3_linux_amd64.zip',
-  'checksum' => 'f97996296ef3905c38c504b35035fb731d3cfd9cad129c9523402a4229c709c5',
+  'file' => 'consul_1.4.0_linux_amd64.zip',
+  'checksum' => '41f8c3d63a18ef4e51372522c1e052618cdfcffa3d9f02dba0b50820e8279824',
 }
 
 default['bcpc']['consul']['executable'] = '/usr/local/sbin/consul'
