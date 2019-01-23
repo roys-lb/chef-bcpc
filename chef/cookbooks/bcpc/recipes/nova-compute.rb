@@ -56,7 +56,7 @@ file '/var/lib/nova/.ssh/authorized_keys' do
   group 'nova'
 end
 
-file '/var/lib/nova/.ssh/id_rsa' do
+file '/var/lib/nova/.ssh/id_ed25519' do
   content Base64.decode64(config['nova']['ssh']['key']).to_s
   mode '600'
   owner 'nova'
