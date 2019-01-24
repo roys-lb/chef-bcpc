@@ -7,7 +7,7 @@ import ipaddress
 def primary_ip(a, *args, **kw):
   for transit in a:
     if 'primary' in transit and transit['primary'] is True:
-      return ipaddress.IPv4Interface(transit['cidr']).ip
+      return ipaddress.IPv4Interface(transit['ip']).ip
 
   return args[0]['ansible_host']
 
