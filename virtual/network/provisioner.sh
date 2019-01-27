@@ -14,18 +14,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-COMMON_PKGS="lldpd traceroute iperf"
+COMMON_PKGS="lldpd traceroute"
 SWITCH_PKGS="bird iptables-persistent"
 
-HOSTNAME=${1}
-TYPE=${2}
-
 is_tor() {
-  [[ ${1} == 'tor' ]]
+  [[ ${1} =~ ^tor ]]
 }
 
 is_spine() {
-  [[ ${1} == 'spine' ]]
+  [[ ${1} =~ ^spine ]]
 }
 
 apt_get="sudo DEBIAN_FRONTEND=noninteractive apt-get -y"
@@ -42,7 +39,7 @@ switch_config() {
     fi
 
     # configure BIRD
-    sudo cp /vagrant/bird/${2}.conf /etc/bird/bird.conf
+    sudo cp /vagrant/bird/${1}.conf /etc/bird/bird.conf
     sudo systemctl restart bird
 }
 
@@ -51,7 +48,7 @@ common_config() {
         sudo systemctl stop ${s}
         sudo systemctl disable ${s}
     done
-    sudo cp /vagrant/netplan/${2}.yaml /etc/netplan/01-netcfg.yaml
+    sudo cp /vagrant/netplan/${1}.yaml /etc/netplan/01-netcfg.yaml
     # stop dhclient on the TORs as netplan(5) doesn't
     is_tor ${1} && dhclient -x
     sudo netplan apply
@@ -59,12 +56,12 @@ common_config() {
 }
 
 ADDITIONAL_PKGS=${COMMON_PKGS}
-is_spine ${TYPE} || is_tor ${TYPE} && \
+is_spine ${1} || is_tor ${1} && \
   ADDITIONAL_PKGS="${ADDITIONAL_PKGS} ${SWITCH_PKGS}"
 ${apt_get} update
 ${apt_get} install ${ADDITIONAL_PKGS}
 
-common_config ${TYPE} ${HOSTNAME}
-is_spine ${TYPE} || is_tor ${TYPE} && switch_config ${TYPE} ${HOSTNAME}
+common_config ${1}
+is_spine ${1} || is_tor ${1} && switch_config ${1}
 
 exit 0
