@@ -1,23 +1,53 @@
 {
-  "name": "virtual",
-  "description": "Virtualized BCPC Environment",
-  "json_class": "Chef::Environment",
-  "chef_type": "environment",
-  "override_attributes": {
-    "bcpc": {
-      "grub": {
-        "cmdline_linux": [
-          "net.ifnames=0",
-          "biosdevname=0"
-        ]
-      },
-      "nova": {
-        "cpu_config": {
-          "cpu_mode": "custom",
-          "cpu_model": "qemu64",
-          "cpu_model_extra_flags": ["abm","lahf_lm","popcnt","sse4a"]
+    "chef_type": "environment",
+    "description": "Virtualized BCPC Environment",
+    "json_class": "Chef::Environment",
+    "name": "virtual",
+    "override_attributes": {
+        "bcpc": {
+            "cloud": {
+                "domain": "bcpc.example.com",
+                "fqdn": "openstack.bcpc.example.com",
+                "region": "virtual",
+                "vip": "10.65.0.254"
+            },
+            "dns": {
+                "servers": [
+                    "8.8.8.8",
+                    "8.8.4.4"
+                ]
+            },
+            "grub": {
+                "cmdline_linux": [
+                    "net.ifnames=0",
+                    "biosdevname=0"
+                ]
+            },
+            "nova": {
+                "cpu_config": {
+                    "cpu_mode": "custom",
+                    "cpu_model": "qemu64",
+                    "cpu_model_extra_flags": [
+                        "abm",
+                        "lahf_lm",
+                        "popcnt",
+                        "sse4a"
+                    ]
+                }
+            },
+            "ntp": {
+                "servers": [
+                    "time1.google.com",
+                    "time2.google.com"
+                ]
+            },
+            "proxy": {
+                "enabled": false,
+                "proxies": {
+                    "http": "http://proxy.example.com",
+                    "https": "https://proxy.example.com"
+                }
+            }
         }
-      }
     }
-  }
 }

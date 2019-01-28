@@ -73,7 +73,7 @@
 
 - name: check node environment
   become: false
-  shell: knife node show -E "{{ node_fqdn }}" | grep "{{ chef_environment }}"
+  shell: knife node show -E "{{ node_fqdn }}" | grep "{{ cloud_region }}"
   register: node_env_check
   failed_when: node_env_check.rc != 0
   ignore_errors: true
@@ -84,7 +84,7 @@
   when: node_env_check is failed
   become: false
   command: |
-    knife node environment set "{{ node_fqdn }}" "{{ chef_environment }}"
+    knife node environment set "{{ node_fqdn }}" "{{ cloud_region }}"
   delegate_to: "{{ chef_server_host }}"
 
 - name: check node runlist

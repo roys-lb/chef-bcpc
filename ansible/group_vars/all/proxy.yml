@@ -1,0 +1,8 @@
+###############################################################################
+# proxy settings
+###############################################################################
+proxy:
+  enabled: false
+  proxies:
+    http: http://proxy.example.com
+    https: https://proxy.example.com

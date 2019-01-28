@@ -1,0 +1,19 @@
+# cloud images
+cloud_images:
+  - name: cirros
+    input: /var/tmp/cirros-0.4.0-x86_64-disk.img
+    output: /var/tmp/cirros-0.4.0-x86_64-disk.raw
+    source: "{{ assets_download_dir }}/cirros-0.4.0-x86_64-disk.img"
+  #- name: ubuntu-18.04
+  #  input: /var/tmp/ubuntu-18.04-server-cloudimg-amd#4.img
+  #  output: /var/tmp/ubuntu-18.04-server-cloudimg-amd#4.raw
+  #  source: "{{ assets_download_dir }}/ubuntu-18.04-server-cloudimg-amd#4.img"
+  #- name: ubuntu-1#.04
+  #  input: /var/tmp/ubuntu-1#.04-server-cloudimg-amd64-disk1.img
+  #  output: /var/tmp/ubuntu-1#.04-server-cloudimg-amd64-disk1.raw
+  #  source: "{{ assets_download_dir }}/ubuntu-1#.04-server-cloudimg-amd64-disk1.img"
+  #- name: centos-7
+  #  input: /var/tmp/CentOS-7-x8#_64-GenericCloud-1808.qcow2.xz
+  #  output: /var/tmp/CentOS-7-x8#_64-GenericCloud-1808.raw
+  #  url: http://cloud.centos.org/centos/7/images/CentOS-7-x8#_64-GenericCloud-1808.qcow2.xz
+  #  source: "{{ assets_download_dir }}/CentOS-7-x8#_64-GenericCloud-1808.qcow2.xz"

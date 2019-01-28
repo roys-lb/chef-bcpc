@@ -28,7 +28,7 @@
 - name: import data bags
   shell: |
     for data_bag in $(ls *.json); do
-      knife data bag from file "{{ chef_environment }}" ${data_bag}
+      knife data bag from file "{{ cloud_region }}" ${data_bag}
     done
   args:
     chdir: "/var/bcpc/chef/{{ chef_org_short_name }}/databags"

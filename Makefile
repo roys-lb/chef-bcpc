@@ -10,7 +10,7 @@ storagenodes = $$(ansible storagenodes -i ${inventory} --list | tail -n +2 | wc 
 
 all : \
 	download-assets \
-	create-operator-user \
+	add-operator \
 	configure-apt \
 	configure-networking \
 	configure-chef-server \
@@ -41,7 +41,7 @@ destroy-virtual-network :
 
 	virtual/bin/destroy-virtual-network.sh
 
-create-operator-user :
+add-operator :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
@@ -139,7 +139,7 @@ sync-chef :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
-		-t upload-bcpc --limit bootstraps
+		-t sync-chef --limit bootstraps
 
 upload-all :
 
@@ -161,11 +161,11 @@ configure-file-server :
 # helper targets
 ###############################################################################
 
-generate-chef-roles :
+generate-chef-environment :
 
 	ansible-playbook -v \
 		-i ${inventory} ${playbooks}/site.yml \
-		-t generate-chef-roles --limit bootstraps
+		-t generate-chef-environment --limit bootstraps
 
 adjust-ceph-pool-pgs:
 

@@ -78,7 +78,7 @@
     - extra-cookbooks
 
 - name: check for environment databag
-  command: knife data bag show "{{ chef_environment }}"
+  command: knife data bag show "{{ cloud_region }}"
   register: databag_check
   failed_when: databag_check.rc != 0
   changed_when: false
@@ -86,4 +86,4 @@
 
 - name: create environment data bag
   when: databag_check is failed
-  command: knife data bag create '{{ chef_environment }}'
+  command: knife data bag create '{{ cloud_region }}'

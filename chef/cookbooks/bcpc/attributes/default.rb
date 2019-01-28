@@ -1,17 +1,6 @@
 ###############################################################################
-# cloud
+# file server
 ###############################################################################
-
-default['bcpc']['cloud']['domain'] = 'bcpc.example.com'
-default['bcpc']['cloud']['fqdn'] = "openstack.#{node['bcpc']['cloud']['domain']}"
-default['bcpc']['cloud']['region'] = node.chef_environment
-default['bcpc']['cloud']['vip'] = '10.65.0.254'
-
-# list of dns servers to use
-default['bcpc']['dns_servers'] = %w(8.8.8.8 8.8.4.4)
-
-# list of ntp servers to use
-default['bcpc']['ntp']['servers'] = %w(time1.google.com time2.google.com)
 
 default['bcpc']['file_server']['url'] = 'http://bootstrap:8080'
 
