@@ -3,8 +3,21 @@
 ###############################################################################
 
 ansible_python_interpreter: /usr/bin/env python3
-ansible_ssh_common_args: "-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o 'IdentitiesOnly yes'"
 ansible_user: "{{ operator_username }}"
+ansible_ssh_common_args: >
+  -o StrictHostKeyChecking=no
+  -o UserKnownHostsFile=/dev/null
+  -o 'IdentitiesOnly yes'
+
+###############################################################################
+# additional_runlists
+###############################################################################
+
+#additional_runlists:
+#  node:
+#    - recipe[bcpc::default]
+#  bootstrap:
+#    - recipe[bcpc::default]
 
 ###############################################################################
 # cloud
