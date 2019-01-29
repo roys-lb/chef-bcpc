@@ -1,4 +1,13 @@
 ###############################################################################
+# virtual environment settings
+###############################################################################
+
+virtual_dir: "{{ root_dir }}/virtual"
+ssh_dir: "{{ virtual_dir }}/files/ssh/"
+ansible_ssh_private_key_file: "{{ ssh_dir }}/id_ed25519"
+operator_authorized_key: "{{ lookup('file', ansible_ssh_private_key_file + '.pub')}}"
+
+###############################################################################
 # additional_cloud_images
 ###############################################################################
 
