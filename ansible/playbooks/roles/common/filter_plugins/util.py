@@ -30,7 +30,7 @@ def find_interface(facts, macaddress):
   for interface in interfaces:
     if interface == 'lo':
       continue
-    if facts.get(interface,{}).get('macaddress',None) == macaddress:
+    if facts.get(interface,{}).get('macaddress', None) == macaddress:
       return facts[interface]
 
   raise ValueError("could not find interface with mac: " + macaddress)
