@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# wrapper to time the command provided in the arguments
+#
+exec /usr/bin/time "$@"
