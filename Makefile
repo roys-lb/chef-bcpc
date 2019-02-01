@@ -8,6 +8,8 @@ export ANSIBLE_CONFIG = ansible/ansible.cfg
 headnodes = $$(ansible headnodes -i ${inventory} --list | tail -n +2 | wc -l)
 storagenodes = $$(ansible storagenodes -i ${inventory} --list | tail -n +2 | wc -l)
 
+SHELL = ./rusage sh
+
 all : \
 	download-assets \
 	add-operator \
