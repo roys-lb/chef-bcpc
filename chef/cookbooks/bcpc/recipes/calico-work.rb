@@ -57,6 +57,7 @@ end
 template '/etc/calico/calicoctl.cfg' do
   source 'calico/calicoctl.cfg.erb'
   variables(
+    cert_type: 'client-ro',
     etcd_endpoints: etcd_endpoints.join(',')
   )
 end
