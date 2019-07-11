@@ -72,7 +72,7 @@ execute 'install rally in virtualenv' do
   environment env
   user 'rally'
   command <<-EOH
-    virtualenv #{venv_dir}
+    virtualenv --no-download #{venv_dir}
     #{venv_dir}/bin/pip install --upgrade pbr
     #{venv_dir}/bin/pip install --upgrade rally-openstack==#{version}
   EOH
